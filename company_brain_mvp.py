@@ -7,18 +7,12 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Am Anfang (direkt nach Imports und Credential-Setup)
-if 'reset' not in st.session_state:
-    st.session_state['reset'] = False
+# Home Button
+st.markdown(
+    "<a href='https://companybrainapp-nbzkmhoq95qtaleoxgjkht.streamlit.app/' target='_self'><button style='font-size:1.1em; font-weight:bold; padding:0.4em 1em;'>🏠 Home / Neu starten</button></a>",
+    unsafe_allow_html=True
+)
 
-if st.button("🏠 Home / Neu starten"):
-    st.session_state['reset'] = True
-    st.experimental_rerun()
-
-if st.session_state['reset']:
-    # Resette Session-State für die Eingaben
-    st.session_state['reset'] = False
-    st.experimental_rerun()
 
 
 # Load .env if it exists (for local use or streamlit secrets)
