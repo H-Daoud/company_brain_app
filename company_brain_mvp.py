@@ -23,14 +23,6 @@ openai_version  = os.getenv("openai_version")    or st.secrets.get("openai_versi
 deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_name")
 
 # === 📋 Streamlit UI ===
-# Reset-Button ganz am Anfang der Datei
-if st.button("🏠 Home / Neu starten"):
-    # Alles im Session State löschen (optional!)
-    for key in st.session_state.keys():
-        del st.session_state[key]
-    st.experimental_rerun()
----------------------------
-
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
 st.title("🧐 Company Brain – Entscheidungsfeedback anhand Unternehmen Datenbank")
 
@@ -136,3 +128,34 @@ Bitte beantworte:
 
 elif uploaded_file and not analyse_button:
     st.info("Bitte gib deine Stakeholder-Frage ein und klicke dann auf „Analyse starten“.")
+import os
+import tempfile
+import streamlit as st
+from azure.ai.formrecognizer import DocumentAnalysisClient
+from azure.core.credentials import AzureKeyCredential
+from openai import AzureOpenAI
+from dotenv import load_dotenv
+from pathlib import Path
+
+# Load .env if it exists (for local use or streamlit secrets)
+dotenv_path = Path(__file__).resolve().parent.parent / ".env"
+if dotenv_path.exists():
+    load_dotenv(dotenv_path=dotenv_path)
+else:
+    print(f"⚠️ No .env file found at {dotenv_path}. Relying on Streamlit secrets...")
+
+# === 🔑 Load credentials: First from environment (.env), then from st.secrets ===
+form_endpoint   = os.getenv("form_endpoint")     or st.secrets.get("form_endpoint")
+form_key        = os.getenv("form_key")          or st.secrets.get("form_key")
+openai_key      = os.getenv("openai_key")        or st.secrets.get("openai_key")
+openai_endpoint = os.getenv("openai_endpoint")   or st.secrets.get("openai_endpoint")
+openai_version  = os.getenv("openai_version")    or st.secrets.get("openai_version")
+deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_name")
+
+# === 📋 Streamlit UI ===
+# Reset-Button ganz am Anfang der Datei
+if st.button("🏠 Home / Neu starten"):
+    # Alles im Session State löschen (optional!)
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.experimental_rerun()
