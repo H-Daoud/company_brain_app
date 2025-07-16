@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 from pathlib import Path
 
 # Home
-if st.button("🏠 Home / Neu starten"):
-    st.experimental_set_query_params()  # clears any URL params if present
-    st.experimental_rerun()
+st.markdown(
+    "[🏠 Home / Neu starten](https://companybrainapp-nbzkmhoq95qtaleoxgjkht.streamlit.app/)"
+)
 
 # Load .env if it exists (for local use or streamlit secrets)
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
