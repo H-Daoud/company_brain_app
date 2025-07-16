@@ -35,11 +35,7 @@ uploaded_file = st.file_uploader(
 st.markdown("<span style='font-size: 1.3em; font-weight: bold;'>📝 Was möchtest du als Stakeholder analysieren lassen?</span>", unsafe_allow_html=True)
 stakeholder_input = st.text_area(
     label=" ",  # Leeres Label, damit der Standardtext nicht angezeigt wird
-    placeholder="z. B. Wie wirkt sich die Zusammenlegung von Vertrieb und Marketing auf unsere KPIs und das Jahresziel aus? 
-    Welche Risiken und Chancen ergeben sich durch den geplanten Personalabbau im Bereich IT? 
-    Sollte das Projekt Alpha priorisiert oder zurückgestellt werden – was empfiehlt das System?
-    Ist die Investition in eine neue Produktionslinie im Einklang mit unserer aktuellen Strategie?
-    Welche Compliance-Auswirkungen hätte die Einführung eines neuen CRM-Systems?"
+    placeholder="z. B. Wie wirkt sich die Zusammenlegung von Vertrieb und Marketing auf unsere KPIs und das Jahresziel aus? Welche Risiken und Chancen ergeben sich durch den geplanten Personalabbau im Bereich IT? Sollte das Projekt Alpha priorisiert oder zurückgestellt werden – was empfiehlt das System? Ist die Investition in eine neue Produktionslinie im Einklang mit unserer aktuellen Strategie? Welche Compliance-Auswirkungen hätte die Einführung eines neuen CRM-Systems?"
 )
 
 analyse_button = st.button("🔍 Analyse starten")
