@@ -152,10 +152,4 @@ openai_endpoint = os.getenv("openai_endpoint")   or st.secrets.get("openai_endpo
 openai_version  = os.getenv("openai_version")    or st.secrets.get("openai_version")
 deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_name")
 
-# === 📋 Streamlit UI ===
-# Reset-Button ganz am Anfang der Datei
-if st.button("🏠 Home / Neu starten"):
-    # Alles im Session State löschen (optional!)
-    for key in st.session_state.keys():
-        del st.session_state[key]
-    st.experimental_rerun()
+
