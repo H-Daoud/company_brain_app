@@ -7,28 +7,10 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
 
-st.markdown(
-    """
-    <style>
-    .home-btn {
-        display: inline-block;
-        background-color: #4CAF50;
-        color: white !important;
-        padding: 10px 22px;
-        font-size: 1.15em;
-        font-weight: bold;
-        border-radius: 8px;
-        text-decoration: none !important;
-        margin-bottom: 20px;
-    }
-    </style>
-    <a href="https://companybrainapp-nbzkmhoq95qtaleoxgjkht.streamlit.app/" target="_self" class="home-btn">🏠 Home / Neu starten</a>
-    """,
-    unsafe_allow_html=True
-)
-
-
-
+# Home
+if st.button("🏠 Home / Neu starten"):
+    st.experimental_set_query_params()  # clears any URL params if present
+    st.experimental_rerun()
 
 # Load .env if it exists (for local use or streamlit secrets)
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
