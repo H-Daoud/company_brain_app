@@ -5,6 +5,13 @@ import pandas as pd
 from io import StringIO
 import openai
 import os
+import tempfile
+from azure.ai.formrecognizer import DocumentAnalysisClient
+from azure.core.credentials import AzureKeyCredential
+from openai import AzureOpenAI
+from dotenv import load_dotenv
+from pathlib import Path
+
 
 # Titel
 st.title("Company Brain – Erweiterter MVP")
