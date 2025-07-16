@@ -1,85 +1,121 @@
-import streamlit as st
-import networkx as nx
-import matplotlib.pyplot as plt
-import pandas as pd
-from io import StringIO
-import openai
 import os
 import tempfile
+import streamlit as st
 from azure.ai.formrecognizer import DocumentAnalysisClient
 from azure.core.credentials import AzureKeyCredential
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
 
-
-# Titel
-st.title("Company Brain – Erweiterter MVP")
-st.subheader("Nutze CSV-Daten, Knowledge Graphs und LLM-Unterstützung zur Entscheidungsfindung")
-
-# API-Key sicher laden (entweder als Umgebungsvariable oder per secrets)
-openai.api_key = os.getenv("OPENAI_API_KEY") or st.secrets.get("OPENAI_API_KEY")
-
-# CSV-Datei hochladen
-st.sidebar.header("Lade Unternehmensdaten hoch (CSV)")
-uploaded_file = st.sidebar.file_uploader("CSV-Datei auswählen", type=["csv"])
-
-if uploaded_file is not None:
-    df = pd.read_csv(uploaded_file)
-    st.markdown("### Vorschau der Daten")
-    st.dataframe(df.head())
-
-    # Extrahiere Spaltennamen als Entitäten
-    entities = list(df.columns[:4])  # z. B. erste 4 Spalten als Beispiel-Entitäten
-
-    # Beispielhafte Rückkopplungsgewichte (hier zufällig / vereinfachte Heuristik)
-    weight_matrix = {
-        (entities[0], entities[1]): +15,
-        (entities[0], entities[2]): -10,
-        (entities[0], entities[3]): +5,
-    }
-
-    # Knowledge Graph erstellen
-    G = nx.DiGraph()
-    for (src, tgt), weight in weight_matrix.items():
-        G.add_edge(src, tgt, weight=weight)
-
-    # Visualisierung
-    pos = nx.spring_layout(G)
-    plt.figure(figsize=(8, 5))
-    nx.draw(G, pos, with_labels=True, node_size=2000, node_color='lightgreen', font_size=10)
-    labels = nx.get_edge_attributes(G, 'weight')
-    nx.draw_networkx_edge_labels(G, pos, edge_labels={k: f"{v:+.1f}%" for k, v in labels.items()})
-    st.pyplot(plt)
-
-    # Tabelle mit simulierten Änderungen anzeigen
-    st.markdown("### Simulierte Auswirkungen (heuristisch)")
-    summary_df = pd.DataFrame({
-        "Faktor": [tgt for (_, tgt) in weight_matrix],
-        "Veränderung in %": [v for v in weight_matrix.values()]
-    })
-    st.table(summary_df)
-
-    # LLM Feedback – Echtzeit mit OpenAI
-    st.markdown("### KI-Feedback zur Entscheidung (GPT-4)")
-    user_prompt = f"Gegeben sind folgende Rückkopplungen im Unternehmen: {weight_matrix}. Was sind mögliche Risiken und Empfehlungen für nachhaltige Entscheidungen?"
-    st.code(user_prompt, language='markdown')
-
-    if openai.api_key:
-        with st.spinner("Generiere Antwort von GPT-4..."):
-            try:
-                response = openai.ChatCompletion.create(
-                    model="gpt-4",
-                    messages=[
-                        {"role": "system", "content": "Du bist ein Unternehmensberater mit Fokus auf systemisches Denken und nachhaltige Geschäftsstrategien."},
-                        {"role": "user", "content": user_prompt}
-                    ]
-                )
-                gpt_output = response.choices[0].message.content
-                st.success(gpt_output)
-            except Exception as e:
-                st.error(f"Fehler bei OpenAI-Abfrage: {e}")
-    else:
-        st.warning("Kein OpenAI API-Key gefunden. Bitte setze `OPENAI_API_KEY` als Umgebungsvariable oder nutze Streamlit Secrets.")
+# Load .env if it exists (for local use or streamlit secrets)
+dotenv_path = Path(__file__).resolve().parent.parent / ".env"
+if dotenv_path.exists():
+    load_dotenv(dotenv_path=dotenv_path)
 else:
-    st.warning("Bitte lade eine CSV-Datei mit Unternehmensdaten hoch, um den Prototypen zu starten.")
+    print(f"⚠️ No .env file found at {dotenv_path}. Relying on Streamlit secrets...")
+
+# === 🔑 Load credentials: First from environment (.env), then from st.secrets ===
+form_endpoint   = os.getenv("form_endpoint")     or st.secrets.get("form_endpoint")
+form_key        = os.getenv("form_key")          or st.secrets.get("form_key")
+openai_key      = os.getenv("openai_key")        or st.secrets.get("openai_key")
+openai_endpoint = os.getenv("openai_endpoint")   or st.secrets.get("openai_endpoint")
+openai_version  = os.getenv("openai_version")    or st.secrets.get("openai_version")
+deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_name")
+
+# === 📋 Streamlit UI ===
+st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
+st.title("🧠 Company Brain – Entscheidungsfeedback aus Dokumenten")
+
+uploaded_file = st.file_uploader(
+    "Lade relevante Unternehmensdokumente hoch (z. B. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
+    type=["pdf", "png", "jpg", "jpeg"]
+)
+
+# ➕ Freitextfeld für Stakeholder-Anfrage
+stakeholder_input = st.text_area(
+    "📝 Was möchtest du als Stakeholder analysieren lassen?",
+    placeholder="z. B. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
+)
+
+if uploaded_file:
+    with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
+        tmp_file.write(uploaded_file.read())
+        tmp_path = tmp_file.name
+
+    # === OCR mit Azure Form Recognizer ===
+    st.info("🔍 Extrahiere Inhalte aus den Dokumenten...")
+    try:
+        ocr_client = DocumentAnalysisClient(
+            endpoint=form_endpoint,
+            credential=AzureKeyCredential(form_key)
+        )
+
+        with open(tmp_path, "rb") as f:
+            poller = ocr_client.begin_analyze_document("prebuilt-document", f)
+            result = poller.result()
+
+        document_text = "\n".join(
+            line.content for page in result.pages for line in page.lines
+        )
+
+        # === GPT-Analyse vorbereiten ===
+        st.success("✅ Text erfolgreich extrahiert.")
+        st.subheader("📄 Extrahierter Inhalt:")
+        st.text_area("Dokumentinhalt", document_text, height=300)
+
+        st.subheader("🤖 KI-gestütztes Entscheidungsfeedback")
+
+        with st.spinner("Analysiere unter Berücksichtigung strategischer Unternehmenskontexte..."):
+            prompt = f"""
+Du bist ein CEO, CFO, CTO und COO in einem hochentwickelten KI-System. Deine Expertise umfasst:
+- Geschäftsstrategie und Management (inkl. Vision, ROI, KPIs)
+- Projektmanagement (PMP)
+- Prozessoptimierung (Six Sigma)
+- Systemdenken und unternehmensweite Architektur
+
+Du analysierst jetzt ein oder mehrere hochgeladene Dokumente im Kontext:
+- Abteilungsdaten
+- Langfriststrategien & Visionen
+- Finanzkennzahlen & KPIs
+- Konzepte & Initiativen
+
+Hier ist der extrahierte Dokumentinhalt:
+"""
+{document_text}
+"""
+
+Stakeholder-Frage:
+"""
+{stakeholder_input}
+"""
+
+Bitte beantworte:
+1. Welche relevanten Entitäten, Beziehungen und Einflussfaktoren lassen sich identifizieren?
+2. Wie hängen diese mit bestehenden Unternehmenszielen, KPIs und ROI zusammen?
+3. Wo entstehen mögliche Zielkonflikte, Abweichungen oder Synergien?
+4. Wie lässt sich dieses Dokument systemisch in ein semantisches Entscheidungsmodell (z. B. Knowledge Graph) integrieren?
+5. Was ist deine Antwort auf die Stakeholder-Anfrage – unter Berücksichtigung von Governance, Ethik, rechtlichen Rahmenbedingungen und Strategie?
+"""
+
+            llm_client = AzureOpenAI(
+                api_key=openai_key,
+                api_version=openai_version,
+                azure_endpoint=openai_endpoint,
+            )
+
+            response = llm_client.chat.completions.create(
+                model=deployment_name,
+                messages=[
+                    {"role": "system", "content": "Du bist ein KI-gestütztes Executive Team für strategische Entscheidungsunterstützung auf Unternehmensebene mit Fokus auf Systemarchitektur, Governance, KPIs, ROI und ethisch-strategische Bewertung."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0.2
+            )
+
+            output = response.choices[0].message.content
+            st.success("✅ Analyse abgeschlossen.")
+            st.text_area("Systemisches Entscheidungsfeedback", output, height=1000)
+
+    except Exception as e:
+        st.error(f"❌ Fehler bei der Analyse: {e}")
+
