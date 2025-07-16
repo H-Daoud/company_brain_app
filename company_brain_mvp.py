@@ -39,7 +39,6 @@ st.text_area(
         "Welche Risiken und Chancen ergeben sich durch den geplanten Personalabbau im Bereich IT?\n"
         "Sollte das Projekt Alpha priorisiert oder zurückgestellt werden – was empfiehlt das System?\n"
         "Ist die Investition in eine neue Produktionslinie im Einklang mit unserer aktuellen Strategie?\n"
-        "Welche Compliance-Auswirkungen hätte die Einführung eines neuen CRM-Systems?"
     )
 )
 
