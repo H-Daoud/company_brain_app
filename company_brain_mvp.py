@@ -37,12 +37,11 @@ stakeholder_input = st.text_area(
     placeholder="z.\u202fB. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
 )
 
-if uploaded_file:
+if uploaded_file and stakeholder_input.strip():
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         tmp_file.write(uploaded_file.read())
         tmp_path = tmp_file.name
 
-    # === OCR mit Azure Form Recognizer ===
     st.info("🔍 Extrahiere Inhalte aus den Dokumenten...")
     try:
         ocr_client = DocumentAnalysisClient(
@@ -58,7 +57,6 @@ if uploaded_file:
             line.content for page in result.pages for line in page.lines
         )
 
-        # === GPT-Analyse vorbereiten ===
         st.success("✅ Text erfolgreich extrahiert.")
         st.subheader("📄 Extrahierter Inhalt:")
         st.text_area("Dokumentinhalt", document_text, height=300)
@@ -96,6 +94,7 @@ Bitte beantworte:
 4. Wie lässt sich dieses Dokument systemisch in ein semantisches Entscheidungsmodell (z. B. Knowledge Graph) integrieren?
 5. Was ist deine Antwort auf die Stakeholder-Anfrage – unter Berücksichtigung von Governance, Ethik, rechtlichen Rahmenbedingungen und Strategie?
 """
+
             llm_client = AzureOpenAI(
                 api_key=openai_key,
                 api_version=openai_version,
@@ -117,6 +116,9 @@ Bitte beantworte:
 
     except Exception as e:
         st.error(f"❌ Fehler bei der Analyse: {e}")
+else:
+    st.info("Bitte lade ein Dokument hoch **und** gib eine Stakeholder-Frage ein.")
+
 
 
 
