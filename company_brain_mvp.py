@@ -32,8 +32,9 @@ uploaded_file = st.file_uploader(
 )
 
 # ➕ Freitextfeld für Stakeholder-Anfrage
+st.markdown("<span style='font-size: 1.3em; font-weight: bold;'>📝 Was möchtest du als Stakeholder analysieren lassen?</span>", unsafe_allow_html=True)
 stakeholder_input = st.text_area(
-    "📝 Was möchtest du als Stakeholder analysieren lassen?",
+    label=" ",  # Leeres Label, damit der Standardtext nicht angezeigt wird
     placeholder="z. B. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
 )
 
