@@ -7,6 +7,20 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
 
+# Am Anfang (direkt nach Imports und Credential-Setup)
+if 'reset' not in st.session_state:
+    st.session_state['reset'] = False
+
+if st.button("🏠 Home / Neu starten"):
+    st.session_state['reset'] = True
+    st.experimental_rerun()
+
+if st.session_state['reset']:
+    # Resette Session-State für die Eingaben
+    st.session_state['reset'] = False
+    st.experimental_rerun()
+
+
 # Load .env if it exists (for local use or streamlit secrets)
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
 if dotenv_path.exists():
