@@ -7,11 +7,26 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Home Button
 st.markdown(
-    "<a href='https://companybrainapp-nbzkmhoq95qtaleoxgjkht.streamlit.app/' target='_self'><button style='font-size:1.1em; font-weight:bold; padding:0.4em 1em;'>🏠 Home / Neu starten</button></a>",
+    """
+    <style>
+    .home-btn {
+        display: inline-block;
+        background-color: #4CAF50;
+        color: white !important;
+        padding: 10px 22px;
+        font-size: 1.15em;
+        font-weight: bold;
+        border-radius: 8px;
+        text-decoration: none !important;
+        margin-bottom: 20px;
+    }
+    </style>
+    <a href="https://companybrainapp-nbzkmhoq95qtaleoxgjkht.streamlit.app/" target="_self" class="home-btn">🏠 Home / Neu starten</a>
+    """,
     unsafe_allow_html=True
 )
+
 
 
 
