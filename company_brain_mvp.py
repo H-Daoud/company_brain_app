@@ -63,6 +63,11 @@ if uploaded_file and stakeholder_input.strip() and analyse_button:
         st.subheader("📄 Extrahierter Inhalt:")
         st.text_area("Dokumentinhalt", document_text, height=300)
 
+        # === Stakeholder-Frage als eigene Section ===
+        st.markdown("---")
+        st.subheader("❓ Stakeholder-Frage")
+        st.info(stakeholder_input)
+
         st.subheader("🤖 KI-gestütztes Entscheidungsfeedback")
 
         with st.spinner("Analysiere unter Berücksichtigung strategischer Unternehmenskontexte..."):
@@ -113,8 +118,9 @@ Bitte beantworte:
             )
 
             output = response.choices[0].message.content
-            st.success("✅ Analyse abgeschlossen.")
-            st.text_area("Systemisches Entscheidungsfeedback", output, height=1000)
+            st.markdown("---")
+            st.subheader("💡 Systemisches Entscheidungsfeedback")
+            st.success(output)
 
     except Exception as e:
         st.error(f"❌ Fehler bei der Analyse: {e}")
