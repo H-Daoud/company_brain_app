@@ -1,11 +1,3 @@
-# Reset-Button ganz am Anfang der Datei
-if st.button("🏠 Home / Neu starten"):
-    # Alles im Session State löschen (optional!)
-    for key in st.session_state.keys():
-        del st.session_state[key]
-    st.experimental_rerun()
-
-
 import os
 import tempfile
 import streamlit as st
@@ -14,7 +6,6 @@ from azure.core.credentials import AzureKeyCredential
 from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
-
 
 # Load .env if it exists (for local use or streamlit secrets)
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
@@ -32,6 +23,14 @@ openai_version  = os.getenv("openai_version")    or st.secrets.get("openai_versi
 deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_name")
 
 # === 📋 Streamlit UI ===
+# Reset-Button ganz am Anfang der Datei
+if st.button("🏠 Home / Neu starten"):
+    # Alles im Session State löschen (optional!)
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.experimental_rerun()
+---------------------------
+
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
 st.title("🧐 Company Brain – Entscheidungsfeedback anhand Unternehmen Datenbank")
 
