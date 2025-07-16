@@ -37,7 +37,7 @@ st.text_area(
     label=" ",
     placeholder=(
         "z. B. Wie wirkt sich die Zusammenlegung von Vertrieb und Marketing auf unsere KPIs und das Jahresziel aus?\n"
-        "Welche Risiken und Chancen ergeben sich durch den geplanten Personalabbau im Bereich IT?\n"
+        "Welche Risiken und Chancen ergeben sich durch den geplanten Personalabbau im Bereich X Abteilung?\n"
         "Sollte das Projekt Alpha priorisiert oder zurückgestellt werden – was empfiehlt das System?\n"
         "Ist die Investition in eine neue Produktionslinie im Einklang mit unserer aktuellen Strategie?\n"
     )
