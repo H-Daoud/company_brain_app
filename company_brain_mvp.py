@@ -80,23 +80,22 @@ Du analysierst jetzt ein oder mehrere hochgeladene Dokumente im Kontext:
 - Konzepte & Initiativen
 
 Hier ist der extrahierte Dokumentinhalt:
-"""
+\"\"\"
 {document_text}
-"""
+\"\"\"
 
 Stakeholder-Frage:
-"""
+\"\"\"
 {stakeholder_input}
-"""
+\"\"\"
 
 Bitte beantworte:
 1. Welche relevanten Entitäten, Beziehungen und Einflussfaktoren lassen sich identifizieren?
 2. Wie hängen diese mit bestehenden Unternehmenszielen, KPIs und ROI zusammen?
 3. Wo entstehen mögliche Zielkonflikte, Abweichungen oder Synergien?
-4. Wie lässt sich dieses Dokument systemisch in ein semantisches Entscheidungsmodell (z.\u202fB. Knowledge Graph) integrieren?
+4. Wie lässt sich dieses Dokument systemisch in ein semantisches Entscheidungsmodell (z. B. Knowledge Graph) integrieren?
 5. Was ist deine Antwort auf die Stakeholder-Anfrage – unter Berücksichtigung von Governance, Ethik, rechtlichen Rahmenbedingungen und Strategie?
 """
-
             llm_client = AzureOpenAI(
                 api_key=openai_key,
                 api_version=openai_version,
