@@ -24,17 +24,17 @@ deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_n
 
 # === 📋 Streamlit UI ===
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
-st.title("🧠 Company Brain – Entscheidungsfeedback aus Dokumenten")
+st.title("🧐 Company Brain – Entscheidungsfeedback aus Dokumenten")
 
 uploaded_file = st.file_uploader(
-    "Lade relevante Unternehmensdokumente hoch (z. B. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
+    "Lade relevante Unternehmensdokumente hoch (z.\u202fB. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
     type=["pdf", "png", "jpg", "jpeg"]
 )
 
 # ➕ Freitextfeld für Stakeholder-Anfrage
 stakeholder_input = st.text_area(
     "📝 Was möchtest du als Stakeholder analysieren lassen?",
-    placeholder="z. B. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
+    placeholder="z.\u202fB. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
 )
 
 if uploaded_file:
@@ -93,7 +93,7 @@ Bitte beantworte:
 1. Welche relevanten Entitäten, Beziehungen und Einflussfaktoren lassen sich identifizieren?
 2. Wie hängen diese mit bestehenden Unternehmenszielen, KPIs und ROI zusammen?
 3. Wo entstehen mögliche Zielkonflikte, Abweichungen oder Synergien?
-4. Wie lässt sich dieses Dokument systemisch in ein semantisches Entscheidungsmodell (z. B. Knowledge Graph) integrieren?
+4. Wie lässt sich dieses Dokument systemisch in ein semantisches Entscheidungsmodell (z.\u202fB. Knowledge Graph) integrieren?
 5. Was ist deine Antwort auf die Stakeholder-Anfrage – unter Berücksichtigung von Governance, Ethik, rechtlichen Rahmenbedingungen und Strategie?
 """
 
@@ -118,5 +118,6 @@ Bitte beantworte:
 
     except Exception as e:
         st.error(f"❌ Fehler bei der Analyse: {e}")
+
 
 
