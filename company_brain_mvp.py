@@ -24,7 +24,7 @@ deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_n
 
 # === 📋 Streamlit UI ===
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
-st.title("🧐 Company Brain – Entscheidungsfeedback anhand Unternehmen Datenbank")
+st.title("🧐 Company Brain – Entscheidungsfeedback anhand der Unternehmensdatenbank")
 
 uploaded_file = st.file_uploader(
     "Lade relevante Unternehmensdokumente hoch (z.\u202fB. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
@@ -35,7 +35,11 @@ uploaded_file = st.file_uploader(
 st.markdown("<span style='font-size: 1.3em; font-weight: bold;'>📝 Was möchtest du als Stakeholder analysieren lassen?</span>", unsafe_allow_html=True)
 stakeholder_input = st.text_area(
     label=" ",  # Leeres Label, damit der Standardtext nicht angezeigt wird
-    placeholder="z. B. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
+    placeholder="z. B. Wie wirkt sich die Zusammenlegung von Vertrieb und Marketing auf unsere KPIs und das Jahresziel aus? 
+    Welche Risiken und Chancen ergeben sich durch den geplanten Personalabbau im Bereich IT? 
+    Sollte das Projekt Alpha priorisiert oder zurückgestellt werden – was empfiehlt das System?
+    Ist die Investition in eine neue Produktionslinie im Einklang mit unserer aktuellen Strategie?
+    Welche Compliance-Auswirkungen hätte die Einführung eines neuen CRM-Systems?"
 )
 
 analyse_button = st.button("🔍 Analyse starten")
