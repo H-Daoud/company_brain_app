@@ -34,10 +34,12 @@ uploaded_file = st.file_uploader(
 # ➕ Freitextfeld für Stakeholder-Anfrage
 stakeholder_input = st.text_area(
     "📝 Was möchtest du als Stakeholder analysieren lassen?",
-    placeholder="z.\u202fB. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
+    placeholder="z. B. Ich möchte Herrn Müller kündigen lassen. Was meinst du?"
 )
 
-if uploaded_file and stakeholder_input.strip():
+analyse_button = st.button("🔍 Analyse starten")
+
+if uploaded_file and stakeholder_input.strip() and analyse_button:
     with tempfile.NamedTemporaryFile(delete=False) as tmp_file:
         tmp_file.write(uploaded_file.read())
         tmp_path = tmp_file.name
@@ -116,9 +118,9 @@ Bitte beantworte:
 
     except Exception as e:
         st.error(f"❌ Fehler bei der Analyse: {e}")
-else:
-    st.info("Bitte lade ein Dokument hoch **und** gib eine Stakeholder-Frage ein.")
 
+elif uploaded_file and not analyse_button:
+    st.info("Bitte gib deine Stakeholder-Frage ein und klicke dann auf „Analyse starten“.")
 
-
-
+elif not uploaded_file:
+    st.info("Bitte lade zunächst ein Unternehmensdokument hoch.")
