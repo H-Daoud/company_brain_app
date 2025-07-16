@@ -24,7 +24,7 @@ deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_n
 
 # === 📋 Streamlit UI ===
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
-st.title("🧐 Company Brain – Entscheidungsfeedback aus Dokumenten")
+st.title("🧐 Company Brain – Entscheidungsfeedback anhand Unternehmen Datenbank")
 
 uploaded_file = st.file_uploader(
     "Lade relevante Unternehmensdokumente hoch (z.\u202fB. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
@@ -127,6 +127,3 @@ Bitte beantworte:
 
 elif uploaded_file and not analyse_button:
     st.info("Bitte gib deine Stakeholder-Frage ein und klicke dann auf „Analyse starten“.")
-
-elif not uploaded_file:
-    st.info("Bitte lade zunächst ein Unternehmensdokument hoch.")
