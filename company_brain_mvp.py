@@ -1,3 +1,11 @@
+# Reset-Button ganz am Anfang der Datei
+if st.button("🏠 Home / Neu starten"):
+    # Alles im Session State löschen (optional!)
+    for key in st.session_state.keys():
+        del st.session_state[key]
+    st.experimental_rerun()
+
+
 import os
 import tempfile
 import streamlit as st
@@ -7,10 +15,6 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Home
-st.markdown(
-    "[🏠 Home / Neu starten](https://companybrainapp-nbzkmhoq95qtaleoxgjkht.streamlit.app/)"
-)
 
 # Load .env if it exists (for local use or streamlit secrets)
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
