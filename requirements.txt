@@ -1,0 +1,42 @@
+# --- Hier ist dein vollständiges requirements.txt für das Projekt ---
+# --- Core ---
+streamlit>=1.35
+pillow>=10.0
+python-dotenv>=1.0
+numpy>=1.26
+requests
+fastapi
+uvicorn
+
+# --- OCR ---
+pytesseract>=0.3
+pdf2image>=1.16
+poppler-utils  # ⚠️ Nicht über pip installierbar – siehe Hinweis unten
+
+# --- Azure AI & OpenAI ---
+openai>=1.9.0
+azure-ai-formrecognizer>=3.3.0
+langchain>=0.3
+langchain-openai>=0.1.6
+langchain-community>=0.3.26
+
+# --- Vectorstore ---
+chromadb>=0.4.22
+
+# --- Optional für Vectorstore / RAG ---
+chromadb>=0.4.22
+
+# --- Utilities ---
+tqdm
+requests
+
+
+# ⚠️ Hinweis zu poppler-utils:
+# poppler-utils (benötigt für pdf2image) kann nicht über pip installiert werden.
+# Du musst es manuell lokal installieren:
+
+# Für macOS:
+# brew install poppler
+
+# Für Ubuntu/Debian:
+# sudo apt-get install poppler-utils
