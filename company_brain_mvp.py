@@ -24,7 +24,8 @@ deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_n
 
 # === 📋 Streamlit UI ===
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
-st.title("🧐 Company Brain – Entscheidungsfeedback anhand der Unternehmensdatenbank")
+st.title("🧐 Company Brain\n"
+         "Entscheidungsfeedback anhand der Unternehmensdatenbank")
 
 uploaded_file = st.file_uploader(
     "Lade relevante Unternehmensdokumente hoch (z.\u202fB. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
