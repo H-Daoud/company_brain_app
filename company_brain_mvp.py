@@ -28,11 +28,11 @@ st.title("🧐 Company Brain\nEntscheidungsfeedback anhand der Unternehmensdaten
 
 # --- File upload field ---
 uploaded_file = st.file_uploader(
-    "Lade relevante Unternehmensdokumente hoch (z.\u202fB. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
+    "Lade relevante Unternehmensdokumente hoch (z. B. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
     type=["pdf", "png", "jpg", "jpeg"]
 )
 
-# --- Free-text field for stakeholder question ---
+# --- Stakeholder question text field (this is CRUCIAL for your bug!) ---
 stakeholder_input = st.text_area(
     label=" ",
     placeholder=(
@@ -135,4 +135,3 @@ Bitte beantworte:
 elif uploaded_file and not analyse_button:
     st.info("Bitte gib deine Stakeholder-Frage ein und klicke dann auf „Analyse starten“.")
 
-# --- (Remove duplicate code below this line!) ---
