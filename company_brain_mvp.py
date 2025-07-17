@@ -134,20 +134,5 @@ Bitte beantworte:
 
 elif uploaded_file and not analyse_button:
     st.info("Bitte gib deine Stakeholder-Frage ein und klicke dann auf „Analyse starten“.")
-import os
-import tempfile
-import streamlit as st
-from azure.ai.formrecognizer import DocumentAnalysisClient
-from azure.core.credentials import AzureKeyCredential
-from openai import AzureOpenAI
-from dotenv import load_dotenv
-from pathlib import Path
-
-# Load .env if it exists (for local use or streamlit secrets)
-dotenv_path = Path(__file__).resolve().parent.parent / ".env"
-if dotenv_path.exists():
-    load_dotenv(dotenv_path=dotenv_path)
-else:
-    print(f"⚠️ No .env file found at {dotenv_path}. Relying on Streamlit secrets...")
 
 
