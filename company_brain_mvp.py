@@ -150,12 +150,4 @@ if dotenv_path.exists():
 else:
     print(f"⚠️ No .env file found at {dotenv_path}. Relying on Streamlit secrets...")
 
-# === 🔑 Load credentials: First from environment (.env), then from st.secrets ===
-form_endpoint   = os.getenv("form_endpoint")     or st.secrets.get("form_endpoint")
-form_key        = os.getenv("form_key")          or st.secrets.get("form_key")
-openai_key      = os.getenv("openai_key")        or st.secrets.get("openai_key")
-openai_endpoint = os.getenv("openai_endpoint")   or st.secrets.get("openai_endpoint")
-openai_version  = os.getenv("openai_version")    or st.secrets.get("openai_version")
-deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_name")
-
 
