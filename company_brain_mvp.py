@@ -7,14 +7,14 @@ from openai import AzureOpenAI
 from dotenv import load_dotenv
 from pathlib import Path
 
-# Load .env if it exists (for local use or streamlit secrets)
+# --- Load .env if it exists (for local use or streamlit secrets) ---
 dotenv_path = Path(__file__).resolve().parent.parent / ".env"
 if dotenv_path.exists():
     load_dotenv(dotenv_path=dotenv_path)
 else:
     print(f"⚠️ No .env file found at {dotenv_path}. Relying on Streamlit secrets...")
 
-# === 🔑 Load credentials: First from environment (.env), then from st.secrets ===
+# --- Load credentials: .env (local) or st.secrets (cloud) ---
 form_endpoint   = os.getenv("form_endpoint")     or st.secrets.get("form_endpoint")
 form_key        = os.getenv("form_key")          or st.secrets.get("form_key")
 openai_key      = os.getenv("openai_key")        or st.secrets.get("openai_key")
@@ -22,18 +22,18 @@ openai_endpoint = os.getenv("openai_endpoint")   or st.secrets.get("openai_endpo
 openai_version  = os.getenv("openai_version")    or st.secrets.get("openai_version")
 deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_name")
 
-# === 📋 Streamlit UI ===
+# --- Streamlit UI setup ---
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
-st.title("🧐 Company Brain\n"
-         "Entscheidungsfeedback anhand der Unternehmensdatenbank")
+st.title("🧐 Company Brain\nEntscheidungsfeedback anhand der Unternehmensdatenbank")
 
+# --- File upload field ---
 uploaded_file = st.file_uploader(
     "Lade relevante Unternehmensdokumente hoch (z.\u202fB. langfristige Unternehmensstrategie, KPI-Berichte, Vision, ROI-Konzepte oder andere entscheidungsrelevante Unterlagen)",
     type=["pdf", "png", "jpg", "jpeg"]
 )
 
-# ➕ Freitextfeld für Stakeholder-Anfrage
-st.text_area(
+# --- Free-text field for stakeholder question ---
+stakeholder_input = st.text_area(
     label=" ",
     placeholder=(
         "z. B. Wie wirkt sich die Zusammenlegung von Vertrieb und Marketing auf unsere KPIs und das Jahresziel aus?\n"
@@ -43,7 +43,7 @@ st.text_area(
     )
 )
 
-
+# --- Button to start analysis ---
 analyse_button = st.button("🔍 Analyse starten")
 
 if uploaded_file and stakeholder_input.strip() and analyse_button:
@@ -70,7 +70,7 @@ if uploaded_file and stakeholder_input.strip() and analyse_button:
         st.subheader("📄 Extrahierter Inhalt:")
         st.text_area("Dokumentinhalt", document_text, height=300)
 
-        # === Stakeholder-Frage als eigene Section ===
+        # --- Display stakeholder question in its own section ---
         st.markdown("---")
         st.subheader("❓ Stakeholder-Frage")
         st.info(stakeholder_input)
@@ -135,4 +135,4 @@ Bitte beantworte:
 elif uploaded_file and not analyse_button:
     st.info("Bitte gib deine Stakeholder-Frage ein und klicke dann auf „Analyse starten“.")
 
-
+# --- (Remove duplicate code below this line!) ---
