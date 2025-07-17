@@ -24,7 +24,7 @@ deployment_name = os.getenv("deployment_name")   or st.secrets.get("deployment_n
 
 # --- Streamlit UI setup ---
 st.set_page_config(page_title="Entscheidungsanalyse", layout="wide")
-st.title("🧐 Deutsche Bahn-Company Brain\nEntscheidungsfeedback anhand der Unternehmensdatenbank")
+st.title("🚆 Deutsche Bahn-Company Brain🧠\nEntscheidungsfeedback anhand der Unternehmensdatenbank")
 
 # --- File upload field ---
 uploaded_file = st.file_uploader(
